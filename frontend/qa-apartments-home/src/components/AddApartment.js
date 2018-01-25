@@ -13,6 +13,7 @@ function create(apartmentObject){
 
     let fetchData = {
         method: 'POST',
+        mode: 'no-cors',
         headers: {
           'Content-Type': 'application/json',
         },
@@ -20,7 +21,6 @@ function create(apartmentObject){
     };
 
     fetch(url, fetchData).then((response)=>{
-        alert(response);
       });
 
 }

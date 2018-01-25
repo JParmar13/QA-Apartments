@@ -40,18 +40,21 @@ public class ApartmentServiceDbImpl implements ApartmentService {
 		Apartment newApartment = util.getObjectForJSON(apartment, Apartment.class);
 		boolean check = newApartment.getBreakClause().compareTo(newApartment.getLeaseStart()) >= 0;
 
+		/*
 		if (newApartment != null) {
-			if (isValidApartmentDates(apartment)) {
-				em.persist(newApartment);
-				return "{\"message\": \"Apartment sucessfully Added\", \"id\" : " + newApartment.getId() + "}";
+			if (!isValidApartmentDates(apartment)) {
+				return "{\"message\": \"Apartment not sucessfully Added\", \"id\" : " + newApartment.getId() + "}";
 			}
 		}
+		*/
 
 		if (!check) {
 			return "{\"message\": \"Break clause must be after lease start date\"}";
 		}
+		
+		em.persist(newApartment);
 
-		return "{\"message\": \"Apartment not added\"}";
+		return "{\"message\": \"Apartment added\"}";
 
 	}
 

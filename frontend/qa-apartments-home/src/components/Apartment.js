@@ -33,7 +33,6 @@ class Apartment extends React.Component {
 
     let fetchData = { 
       method: 'GET',
-      mode: 'no-cors'
     };
    
     fetch(url+selectedValue,fetchData)
@@ -46,8 +45,6 @@ class Apartment extends React.Component {
         throw Error(response.statusText);
     })
     .then(response=>{
-      //Do stuff with the JSON
-      //alert(JSON.stringify(response));
       this.setState({
                     leaseStart:response.leaseStart,
                     leaseEnd:response.leaseEnd,
@@ -69,25 +66,23 @@ getApartmentList = () => {
   let url = `${baseUrl}apartment/json/`;
   let fetchData = { 
     method: 'GET',
-    mode: 'no-cors'
   };
 
   fetch(url,fetchData)
-  .then(response=>
-       response.ok?response.json():Error(response.statusText)
-  )
-  .then(response=>{
-    console.log('adding stuf')
-    const ids = response.reduce((acc,apartment)=>{
-      acc.push(apartment.id);
-      return acc;
-    },[])
-    console.log(ids)
-     this.setState({stateText:ids});
+  .then(function(response){ 
+      return response.json();  
   })
-  .catch(error=>{
-    console.log("Request Failed: " + error.message);
-  });
+  .then(response=>{
+
+     let apartList = [];
+
+    for(let x in response){
+        apartList.push(response[x].id);
+    }
+
+    this.setState({stateText:apartList});
+
+  })
 
 }
 
@@ -95,7 +90,6 @@ getAllRooms = (idValue) => {
   let url = `${baseUrl}room/getRoom/`;
   let fetchData = { 
     method: 'GET',
-    mode: 'no-cors'
   };
 
   fetch(url,fetchData)
@@ -124,7 +118,6 @@ getRoomDetails = () => {
 
   let fetchData = { 
     method: 'GET',
-    mode: 'no-cors'
   };
 
   fetch(url,fetchData)
@@ -159,6 +152,7 @@ getRoomDetails = () => {
          <ApartmentList list={this.state.stateText}/>
             <br/>
             <button id="getApartment"onClick={()=>this.getApartment()}>Get Apartment</button><br/>
+            <button id="refreshList" onClick={()=>this.getApartmentList()}>Refresh</button><br/>
         </div>
         <br/> <br/> 
         <hr/>
